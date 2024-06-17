@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "todo-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["povarna <povarna@adobe.com>"]
+readme = "README.md"
+packages = [{include = "todo_fastapi", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from core.config import get_app_settings
 from db.repository.base import BaseRepository
 from db.session import get_db
-from models.users import UserCreateDTO, UserUpdateDTO, User
+from core.models.users import UserCreateDTO, UserUpdateDTO, User
 
 settings = get_app_settings()
 

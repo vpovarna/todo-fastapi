@@ -1,4 +1,4 @@
-from core.schemas.Status import Status
+from core.models.status import Status
 from fastapi import APIRouter
 from version import response
 

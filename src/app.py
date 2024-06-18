@@ -24,6 +24,8 @@ def create_app():
 
     application.include_router(api_router, prefix="/api/v1")
 
+    # TODO: Adding midleware
+
     return application
 
 

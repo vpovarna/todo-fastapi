@@ -1,10 +1,10 @@
 import logging
 from typing import List
 
-from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 
 
-class AppSettings(BaseModel):
+class AppSettings(BaseSettings):
     """
     Base application settings
     """
@@ -13,9 +13,5 @@ class AppSettings(BaseModel):
     allowed_hosts: List[str] = ["*"]
     logging_level: int = logging.INFO
 
-    # database_url: str
-    min_connections_count: int = 5
-    max_connections_count: int = 10
-
     class Config:
-        env_file = ".env"
+        validate_assignment = True

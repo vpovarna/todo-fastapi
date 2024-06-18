@@ -13,5 +13,9 @@ class AppSettings(BaseSettings):
     allowed_hosts: List[str] = ["*"]
     logging_level: int = logging.INFO
 
+    database_url: str
+    min_connection_count: int = 5
+    max_connection_count: int = 10
+
     class Config:
         validate_assignment = True

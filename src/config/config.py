@@ -1,7 +1,7 @@
 from functools import lru_cache
 from dotenv import load_dotenv
 
-from config.app_config import AppConfig, DatabaseConfig, ServerConfig
+from domain.config import AppConfig, DatabaseConfig, ServerConfig
 
 
 @lru_cache

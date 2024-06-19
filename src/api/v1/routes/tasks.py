@@ -48,4 +48,7 @@ def delete_task(task_id: int) -> Response:
 
 @router.put("/{task_id}", response_model=Response[TaskDTO], status_code=HTTPStatus.OK)
 def update_task(task_id: int, task: CreateTask) -> Response:
+    """
+    Update a task by id
+    """
     return Response(message="Task updated", status_code=HTTPStatus.OK)

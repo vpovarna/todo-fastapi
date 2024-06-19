@@ -21,7 +21,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=session)
 Base = declarative_base()
 
 
-
 def get_db() -> Generator:
     """
     Generate dependency yield database connection.

@@ -7,7 +7,7 @@ class TaskDTO(BaseModel):
     done: bool = Field(..., title="Task status")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         fields_order = ['id', 'title', 'done']
 
 

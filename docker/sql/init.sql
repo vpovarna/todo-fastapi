@@ -1,0 +1,2 @@
+-- Database
+CREATE DATABASE todo;

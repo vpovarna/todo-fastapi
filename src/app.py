@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from api.v1.router import router as api_router
+from db.session import Base, session
 
 
 def create_app() -> FastAPI:
@@ -12,6 +13,9 @@ def create_app() -> FastAPI:
     # TODO: Add application settings
 
     application = FastAPI()
+
+    # Database initialization
+    Base.metadata.create_all(session)
 
     application.add_middleware(
         CORSMiddleware,

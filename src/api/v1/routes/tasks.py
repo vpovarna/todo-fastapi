@@ -1,54 +1,51 @@
-from http import HTTPStatus
+from fastapi import APIRouter, Depends
+from starlette.status import HTTP_201_CREATED, HTTP_200_OK
 
-from fastapi import APIRouter
-
+from db.repositories.tasks import TasksRepository, get_tasks_repository
 from domain.response import Response
-from domain.tasks import TaskDTO, CreateTask
+from domain.task import Task, TaskInDB
+from schemas.tasks import TaskItemCreate
 
 # TODO: Add security dependency
 router = APIRouter()
 
 
-@router.get("/{task_id}", response_model=Response[TaskDTO], status_code=HTTPStatus.OK)
-def get_task(task_id: int) -> Response:
+@router.post("", response_model=Response[Task], status_code=HTTP_201_CREATED)
+def create_task(create_task: TaskItemCreate, tasks_repo: TasksRepository = Depends(get_tasks_repository)) -> Response:
+    """
+    Create new task.
+    """
+    db_task = tasks_repo.create(create_task)
+    return Response(data=Task(id=db_task.id), message="Task created successfully", status_code=HTTP_201_CREATED)
+
+
+@router.get("/{task_id}", response_model=Response[Task], status_code=HTTP_200_OK)
+def get_task(task_id: int, tasks_repo: TasksRepository = Depends(get_tasks_repository)) -> Response:
     """"
     Retrieves a task by `task_id`.
     """
 
-    task_dto = TaskDTO(
-        id=task_id,
-        title="Test task",
-        done=False
+    db_task = tasks_repo.get_task(task_id)
+    task_in_db = TaskInDB(
+        id=db_task.id,
+        title=db_task.title,
+        description=db_task.description,
+        completed=db_task.completed,
+        completed_at=db_task.completed_at
     )
-    return Response(data=task_dto, status_code=HTTPStatus.OK)
+    return Response(data=task_in_db, status_code=HTTP_200_OK)
 
-
-@router.post("", response_model=Response[TaskDTO], status_code=HTTPStatus.CREATED)
-def create_task(task: CreateTask) -> Response:
-    """
-    Create a new task
-    """
-
-    task_dto = TaskDTO(
-        title=task.title,
-        id=1,
-        done=False
-    )
-
-    return Response(data=task_dto.dict(), message="The task was successfully created", status_code=HTTPStatus.CREATED)
-
-
-@router.delete("/{task_id")
-def delete_task(task_id: int) -> Response:
-    """
-    Delete a task by id
-    """
-    return Response(message="Task deleted", status_code=HTTPStatus.NO_CONTENT)
-
-
-@router.put("/{task_id}", response_model=Response[TaskDTO], status_code=HTTPStatus.OK)
-def update_task(task_id: int, task: CreateTask) -> Response:
-    """
-    Update a task by id
-    """
-    return Response(message="Task updated", status_code=HTTPStatus.OK)
+# @router.delete("/{task_id")
+# def delete_task(task_id: int) -> Response:
+#     """
+#     Delete a task by id
+#     """
+#     return Response(message="Task deleted", status_code=HTTPStatus.NO_CONTENT)
+#
+#
+# @router.put("/{task_id}", response_model=Response[TaskDTO], status_code=HTTPStatus.OK)
+# def update_task(task_id: int, task: CreateTask) -> Response:
+#     """
+#     Update a task by id
+#     """
+#     return Response(message="Task updated", status_code=HTTPStatus.OK)

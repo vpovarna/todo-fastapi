@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from api.v1.router import router as api_router
 from db.session import Base, session
+from hadlers.exceptions import add_exceptions_handlers
 
 
 def create_app() -> FastAPI:
@@ -26,6 +27,7 @@ def create_app() -> FastAPI:
     )
 
     application.include_router(api_router, prefix="/api")
+    add_exceptions_handlers(app=application)
 
     return application
 

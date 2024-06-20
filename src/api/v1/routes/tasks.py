@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from starlette.exceptions import HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_204_NO_CONTENT
@@ -9,6 +11,8 @@ from domain.task import TaskBase, Task, TaskInDB, TaskInUpdate
 # TODO: Add security dependency
 router = APIRouter()
 
+
+# TODO: Validate models (DB / DAO)
 
 @router.post("", response_model=Response[Task], status_code=HTTP_201_CREATED)
 def create_task(task_base: TaskBase, tasks_repo: TasksRepository = Depends(get_tasks_repository)) -> Response:
@@ -65,3 +69,12 @@ def update_task(task_id: int, task: TaskInUpdate,
 
     task_repo.update_task(db_task, task)
     return Response(message="Task updated", status_code=HTTP_200_OK)
+
+
+@router.get("", response_model=Response[List[TaskBase]], status_code=HTTP_200_OK)
+def get_todos(skip: int = 0, limit: int = 100, task_repo: TasksRepository = Depends(get_tasks_repository)):
+    """
+    Return all tasks
+    """
+    todos = task_repo.get_all(skip=skip, limit=limit)
+    return Response(data=todos, status_code=HTTP_200_OK)

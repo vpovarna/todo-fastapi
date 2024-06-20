@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Type
 
 from fastapi import Depends
 from fastapi.encoders import jsonable_encoder
@@ -62,6 +62,12 @@ class TasksRepository:
         self.db.commit()
         self.db.refresh(task)
         return task
+
+    def get_all(self, skip: int, limit: int = 100) -> List[Type[Task]]:
+        """
+        Return all objects from specific db table.
+        """
+        return self.db.query(Task).offset(skip).limit(limit).all()
 
 
 def get_tasks_repository(db: Session = Depends(get_db)) -> TasksRepository:

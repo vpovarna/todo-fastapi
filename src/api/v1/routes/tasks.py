@@ -1,3 +1,4 @@
+from loggin.loggin import logger
 from typing import List
 
 from fastapi import APIRouter, Depends
@@ -28,7 +29,8 @@ def get_task(task_id: int, tasks_repo: TasksRepository = Depends(get_tasks_repos
     """"
     Retrieves a task by `task_id`.
     """
-
+    logger.info(f"Fetching the task with id: {task_id} from db")
+    # TODO: Extract this in a method
     db_task = tasks_repo.get_task(task_id)
     if db_task is None:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Task not found")
@@ -40,7 +42,6 @@ def get_task(task_id: int, tasks_repo: TasksRepository = Depends(get_tasks_repos
         completed=db_task.completed,
         completed_at=db_task.completed_at
     )
-    print(task_in_db)
     return Response(data=task_in_db, status_code=HTTP_200_OK)
 
 
